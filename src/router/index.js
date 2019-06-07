@@ -26,7 +26,7 @@ export default new Router({
         if (store.state.isAuthenticated) {
           next();
         } else {
-          next("/");
+          next("/login");
         }
       }
     },
@@ -39,7 +39,20 @@ export default new Router({
         if (store.state.isAuthenticated) {
           next();
         } else {
-          next("/");
+          next("/login");
+        }
+      }
+    },
+
+    {
+      path: "/sentosa/list",
+      name: "sentosaList",
+      component: SentosaList,
+      beforeEnter(to, from, next) {
+        if (store.state.isAuthenticated) {
+          next();
+        } else {
+          next("/login");
         }
       }
     },
@@ -51,7 +64,7 @@ export default new Router({
         if (store.state.isAuthenticated) {
           next();
         } else {
-          next("/");
+          next("/login");
         }
       }
     }

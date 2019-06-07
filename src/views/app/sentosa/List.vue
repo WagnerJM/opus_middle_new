@@ -1,5 +1,16 @@
 <template>
   <div class="container">
+    <div>
+      <ul class="breadcrumb">
+        <li>
+          <router-link to="/">Home</router-link>
+        </li>
+        <li>
+          <router-link to="/sentosa">Sentosa</router-link>
+        </li>
+        <li>Übersicht</li>
+      </ul>
+    </div>
     <h2>Liste erstellen</h2>
     <div class="flex-container">
       <div class="toolbar">
@@ -44,6 +55,7 @@
 
 <script>
 export default {
+ 
   created() {
     var modal = document.getElementById("myModal");
 

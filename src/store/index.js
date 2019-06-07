@@ -9,7 +9,13 @@ const store = new Vuex.Store({
   state: {
     isAuthenticated: true,
     loading: false,
-    token: ""
+    token: "",
+    admin: {
+      users: [],
+      config: {
+        sentosa: {}
+      }
+    }
   },
   mutations: {
     loading: state => {
