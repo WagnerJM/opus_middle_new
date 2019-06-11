@@ -8,7 +8,7 @@
 
       <nav>
         <label for="tab1">User</label>
-        <label for="tab2" style="display:none;">Sentosa</label>
+        <label for="tab2" >Sentosa</label>
       </nav>
 
       <figure>
@@ -18,7 +18,7 @@
         <div class="tab2">
           <h3>Sentosa Grundeinstellungen</h3>
           <div class="flex-container">
-            <h4>Kontrollen automatisch hinzufügen</h4>
+            <h4>Kontrollen automatisch am Anfang hinzufügen</h4>
             <label class="checkbox">
               Positiv Konstrolle
               <input type="checkbox">
@@ -29,6 +29,10 @@
               <input type="checkbox">
               <span class="checkmark"></span>
             </label>
+            <div class="row" >
+          <button >Speichern</button>
+
+            </div>
           </div>
         </div>
       </figure>
