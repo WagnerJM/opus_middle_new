@@ -6,6 +6,8 @@ import SentosaHome from "../views/app/sentosa/Home.vue";
 import SentosaList from "../views/app/sentosa/List.vue";
 
 import Login from "../views/auth/Login.vue";
+import Logout from "../views/auth/Logout.vue";
+
 import Admin from "../views/admin/Home.vue";
 
 Vue.use(Router);
@@ -18,6 +20,19 @@ export default new Router({
       name: "login",
       component: Login
     },
+        {
+          path: "/logout",
+          name: "logout",
+          component: Logout,
+          beforeEnter(to, from, next) {
+            if (store.state.isAuthenticated) {
+              next();
+            } else {
+              next("/login");
+            }
+          }
+        },
+
     {
       path: "/",
       name: "deviceView",
