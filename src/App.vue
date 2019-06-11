@@ -7,7 +7,7 @@
       <div v-if="this.$store.state.isAuthenticated">
         <router-link class="active right" to="/logout">Logout</router-link>
 
-        <router-link class="right" to="/admin">Admin</router-link>
+        <router-link class="right" to="/admin" v-show="this.$store.state.user.is_admin">Admin</router-link>
         <router-link to class="right">User</router-link>
         <router-link class="right" to="/">Home</router-link>
       </div>
@@ -16,6 +16,10 @@
       </div>
     </div>
     <router-view/>
+    <footer class="footer" >
+      <div >&copy; {{ new Date().getFullYear() }} J-M. Wagner</div>
+      <div v-if="this.$store.state.isAuthenticated" ><router-link to="/logout">logout</router-link></div>
+    </footer>
   </div>
 </template>
 
@@ -26,6 +30,41 @@ export default {
 </script>
 
 <style>
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0 px;
+  padding: 10px;
+  background-color: #ddd;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+}
+
+
+.loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 body {
   margin: 0; /* Added */
 }
