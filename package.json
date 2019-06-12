@@ -1,5 +1,5 @@
 {
-  "name": "codesandbox",
+  "name": "opus-l-m-middle",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -45,5 +45,7 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "keywords": [],
+  "description": ""
 }
