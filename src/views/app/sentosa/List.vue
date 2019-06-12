@@ -32,6 +32,15 @@
             <th>Untersuchung</th>
             <th>Sortierung</th>
           </thead>
+          <tr v-for="(auftrag, i) in orders" :key="i">
+            <td>{{auftrag.pos}}</td>
+            <td>{{auftrag.anr}}</td>
+            <td>{{auftrag.untersuchung}}</td>
+            <td>
+              <i class="material-icons icon-button">arrow_drop_up</i>
+              <i class="material-icons icon-button">arrow_drop_down</i>
+            </td>
+          </tr>
         </table>
       </div>
     </div>
@@ -57,11 +66,25 @@ export default {
     closeModal() {
       this.showDialog = false;
     }
+  },
+  computed: {
+    orders() {
+      return this.$store.getters["sentosaList"];
+    }
   }
 };
 </script>
 
 <style>
+.icon-button {
+  background: #ffcc00;
+  padding: 5px;
+  border-radius: 50%;
+  margin: 5px;
+}
+.icon-button:hover {
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
 .toolbar {
   display: flex;
   flex-direction: row;

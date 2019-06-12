@@ -19,7 +19,8 @@ const store = new Vuex.Store({
       config: {
         sentosa: {}
       }
-    }
+    },
+    sentosaList: []
   },
   mutations: {
     listLoader: state => {
@@ -44,6 +45,9 @@ const store = new Vuex.Store({
     },
     setUserData: (state, payload) => {
       state.user = payload.user;
+    },
+    setAuftrag: (state, payload) => {
+      state.sentosaList = payload;
     }
   },
   actions: {
@@ -92,18 +96,48 @@ const store = new Vuex.Store({
         });
     },
     PREPARE_SENTOSA_LIST({ commit, state }) {
-      //set ListLoader
+      let tempList = [];
+      commit("listLoader");
+      tempList.push({ pos: 1, anr: "00000000", untersuchung: "pk" });
+      tempList.push({ pos: 2, anr: "00000000", untersuchung: "nk" });
       //set pk, nk according settings
-      //sentosaUntersuchungen = get relevante Untersuchungen
+      /*
+      if (state.admin.config.sentosa.auto_pk_anfang) {
+        tempList.push({ pos: 1, anr: "00000000", untersuchung: "pk" });
+      }
+      if (state.admin.config.sentosa.auto_nk_anfang) {
+        tempList.push({ pos: 2, anr: "00000000", untersuchung: "nk" });
+      }
+      */
+      //let array = state.admin.config.sentosa.sentosa_unters;
+
       // für jede Untersuchung in dem Array mach ein axios call zum GET Endpoint mit ?untersuchung=sentosaUntersuchung['bezeichnung]
       //for (var i = 0; i < sentosaUntersuchungen.lenght(); i++) {}
+      /*
+      
+      for (let i = 0; i < array.length; i++) {
+        http
+          .get(`/auftrag?untersuchung=${array[i]}`)
+          .then(res => {
+            tempList.push(res.data);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      } 
+      */
       //for each http call => push to sentosaList
+      commit("setAuftrag", tempList);
       //sentosaList.length()
+      commit("listLoader");
     }
   },
   getters: {
     token({ token }) {
       return token;
+    },
+    sentosaList({ sentosaList }) {
+      return sentosaList;
     }
   }
 });
