@@ -1,91 +1,63 @@
 <template>
-  <div class="container">
-    <div>
-      <ul class="breadcrumb">
-        <li>
-          <router-link to="/">Home</router-link>
-        </li>
-        <li>
-          <router-link to="/sentosa">Sentosa</router-link>
-        </li>
-        <li>Übersicht</li>
-      </ul>
+  <div class="container" v-if="this.$store.state.loading">
+    <div class="loader"></div>
+  </div>
+  <div class="container" v-else>
+    <div v-if="this.$store.state.showListLoader" class="loader-container">
+      <div class="loader"></div>
     </div>
-    <h2>Liste erstellen</h2>
-    <div class="flex-container">
-      <div class="toolbar">
-        <button id="myBtn" @click="openModal">Kontrolle hinzufügen</button>
-        <button>Aufträge holen</button>
-        <button>Liste erstellen</button>
+    <div v-else>
+      <div>
+        <ul class="breadcrumb">
+          <li>
+            <router-link to="/">Home</router-link>
+          </li>
+          <li>
+            <router-link to="/sentosa">Sentosa</router-link>
+          </li>
+          <li>Übersicht</li>
+        </ul>
       </div>
-
-      <!-- The Modal -->
-      <div id="myModal" class="modal">
-        <!-- Modal content -->
-        <div class="modal-content">
-          <span class="close">&times;</span>
-          <p>
-            <label for="Bezeichnung">Bezeichnung</label>
-            <input
-              type="text"
-              id="Bezeichnung"
-              name="Bezeichnung"
-              placeholder="Bezeichnung.."
-              v-model="kontrolle.bezeichnung"
-            >
-          </p>
-          <p>
-            <button>Hinzufügen</button>
-            <button>Schließen</button>
-          </p>
+      <h2>Liste erstellen</h2>
+      <div class="flex-container">
+        <div class="toolbar">
+          <button @click="showModal">Liste vorbereiten</button>
+          <button>Liste erstellen</button>
         </div>
-      </div>
 
-      <table>
-        <thead>
-          <th>Pos</th>
-          <th>Auftragsnummer</th>
-          <th>Untersuchung</th>
-          <th>Sortierung</th>
-        </thead>
-      </table>
+        <table>
+          <thead>
+            <th>Pos</th>
+            <th>Auftragsnummer</th>
+            <th>Untersuchung</th>
+            <th>Sortierung</th>
+          </thead>
+        </table>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
- 
-  created() {
-    var modal = document.getElementById("myModal");
-
-    // Get the button that opens the modal
-    var btn = document.getElementById("myBtn");
-
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
-    this.modal = modal;
-    this.btn = btn;
-    this.span = span;
+  data() {
+    return {
+      showDialog: false,
+      test: "Tunnel"
+    };
   },
-  computed: {},
+
   methods: {
-    openModal() {
-      this.modal.style.display = "block";
+    card_click: function(event, path) {
+      this.$router.push(path);
+    },
+    showModal() {
+      this.$store.dispatch("PREPARE_SENTOSA_LIST");
     },
     closeModal() {
-      this.modal.style.display = "none";
+      this.showDialog = false;
     }
-  },
-  data: () => ({
-    kontrolle: {
-      bezeichnung: ""
-    },
-    liste: [],
-    modal: null,
-    btn: null,
-    span: null
-  })
+  }
 };
 </script>
 

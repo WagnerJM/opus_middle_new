@@ -29,7 +29,6 @@
 </template>
 
 <script>
-import modal from "@/components/Modal.vue";
 export default {
   data() {
     return {
@@ -37,9 +36,6 @@ export default {
     };
   },
 
-  components: {
-    modal
-  },
   methods: {
     card_click: function(event, path) {
       this.$router.push(path);

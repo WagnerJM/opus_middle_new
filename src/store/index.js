@@ -1,26 +1,30 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import http from "../axios-instance";
-import router from '../router'
+import router from "../router";
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
   modules: {},
   state: {
-    isAuthenticated: false,
+    isAuthenticated: true,
     loading: false,
     token: "",
-    message:"",
+    message: "",
+    showListLoader: false,
     user: {},
     admin: {
       users: [],
       config: {
         sentosa: {}
+      }
     }
-  }
   },
   mutations: {
+    listLoader: state => {
+      state.showListLoader = !state.showListLoader;
+    },
     loading: state => {
       state.loading = !state.loading;
     },
@@ -44,41 +48,57 @@ const store = new Vuex.Store({
   },
   actions: {
     LOGIN({ commit, dispatch }, payload) {
-      commit('loading');
-      http.post("/login", {
-        username: payload.username,
-        password: payload.password
-      }).then( (res) => {
-        commit("setToken", res.data);
-        commit("login_success");
-        router.push("/");
-        commit("loading");
-        dispatch("GET_INITIAL_DATA");
-      }).catch( (error) => {
-        console.log(error);
-      })
+      commit("loading");
+      http
+        .post("/login", {
+          username: payload.username,
+          password: payload.password
+        })
+        .then(res => {
+          commit("setToken", res.data);
+          commit("login_success");
+          router.push("/");
+          commit("loading");
+          dispatch("GET_INITIAL_DATA");
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
-    LOGOUT({commit}) {
+    LOGOUT({ commit }) {
       //logout
       commit("loading");
-      http.post("/logout").then( (res) => {
-        commit("setMessage", res.data);
-        router.push("/login")
-        commit("logout");
-        //TODO: remove all data from store
-      }).catch((error) => {
-        console.log(error);
-      })
+      http
+        .post("/logout")
+        .then(res => {
+          commit("setMessage", res.data);
+          router.push("/login");
+          commit("logout");
+          //TODO: remove all data from store
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
     GET_INITIAL_DATA({ commit, dispatch }) {
       //gets initial data (userData, settings)
-      http.get("/user")
-      .then((res) => {
-        commit("setUserData", res.data)
-      }).catch((error) => {
-        console.log(error);
-      })
-
+      http
+        .get("/user")
+        .then(res => {
+          commit("setUserData", res.data);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    PREPARE_SENTOSA_LIST({ commit, state }) {
+      //set ListLoader
+      //set pk, nk according settings
+      //sentosaUntersuchungen = get relevante Untersuchungen
+      // für jede Untersuchung in dem Array mach ein axios call zum GET Endpoint mit ?untersuchung=sentosaUntersuchung['bezeichnung]
+      //for (var i = 0; i < sentosaUntersuchungen.lenght(); i++) {}
+      //for each http call => push to sentosaList
+      //sentosaList.length()
     }
   },
   getters: {
@@ -86,6 +106,5 @@ const store = new Vuex.Store({
       return token;
     }
   }
-
 });
 export default store;

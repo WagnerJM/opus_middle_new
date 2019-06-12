@@ -2,13 +2,12 @@
   <div id="app">
     <div class="topnav">
       <a style="background-color: #ffcc00; color: grey">
-        <b>Opus::L/M- Middle</b>
+        <b>Opus::L/M - Middle</b>
       </a>
       <div v-if="this.$store.state.isAuthenticated">
-        <router-link class="active right" to="/logout">Logout</router-link>
-
+        <router-link to class="right active">User</router-link>
         <router-link class="right" to="/admin" v-show="this.$store.state.user.is_admin">Admin</router-link>
-        <router-link to class="right">User</router-link>
+
         <router-link class="right" to="/">Home</router-link>
       </div>
       <div v-else>
@@ -16,9 +15,11 @@
       </div>
     </div>
     <router-view/>
-    <footer class="footer" >
-      <div >&copy; {{ new Date().getFullYear() }} J-M. Wagner</div>
-      <div v-if="this.$store.state.isAuthenticated" ><router-link to="/logout">logout</router-link></div>
+    <footer class="footer">
+      <div>&copy; {{ new Date().getFullYear() }} J-M. Wagner</div>
+      <div v-if="this.$store.state.isAuthenticated">
+        <router-link style="padding: 20px;" to="/logout">logout</router-link>
+      </div>
     </footer>
   </div>
 </template>
@@ -30,7 +31,6 @@ export default {
 </script>
 
 <style>
-
 .footer {
   position: fixed;
   bottom: 0;
@@ -41,29 +41,47 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-
 }
-
 
 .loader {
   border: 16px solid #f3f3f3;
   border-radius: 50%;
-  border-top: 16px solid #3498db;
+  border-top: 16px solid #ffcc00;
   width: 120px;
   height: 120px;
   -webkit-animation: spin 2s linear infinite; /* Safari */
   animation: spin 2s linear infinite;
+
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+  margin-left: -50px;
+  margin-top: -50px;
+}
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 /* Safari */
 @-webkit-keyframes spin {
-  0% { -webkit-transform: rotate(0deg); }
-  100% { -webkit-transform: rotate(360deg); }
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 body {
   margin: 0; /* Added */
