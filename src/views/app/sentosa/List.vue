@@ -40,7 +40,7 @@
               >add</i>
             </div>
           </Modal>
-          <button>Liste erstellen</button>
+          <button @click="createList">Liste erstellen</button>
         </div>
         <button @click="resetList">Reset</button>
 
@@ -68,6 +68,7 @@
 </template>
 
 <script>
+import http from "@/axios-instance";
 import draggable from "vuedraggable";
 
 import Modal from "@/components/Modal";
@@ -165,6 +166,26 @@ export default {
         title: "Erfolg",
         message: "Die Liste wurde erfolgreich resettet"
       });
+    },
+    createList() {
+      this.$store.commit("loading");
+      http
+        .post("/list", this.list)
+        .then(res => {
+          this.listnummer = res.data.listnummer;
+          this.flashMessage.success({
+            titel: "Erfolg",
+            message:
+              "Liste wurde erfolgreich angelegt und in kürze an das Gerät gesendet."
+          });
+          this.$store.commit("loading");
+        })
+        .catch(error => {
+          this.flashMessage.error({
+            titel: "Error",
+            message: error
+          });
+        });
     }
   },
   computed: {
