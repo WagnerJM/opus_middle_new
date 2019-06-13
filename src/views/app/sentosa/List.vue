@@ -21,26 +21,42 @@
       <h2>Liste erstellen</h2>
       <div class="flex-container">
         <div class="toolbar">
-          <button @click="showModal">Liste vorbereiten</button>
+          <button @click="prepareList">Liste vorbereiten</button>
+          <button @click="toggleModal">Kontrolle hinzufügen</button>
+
+          <Modal
+            v-bind="{ closeCallback: toggleModal, showModal, customClass: 'custom_modal_class'}"
+          >
+            <h2>Kontrolle</h2>
+            <label for>Position</label>
+            <input v-model="this.kontrolle.pos" type="text">
+            <label for>Untersuchung</label>
+            <input v-model="kontrolle.untersuchung" type="text">
+            <i
+              @click="addKontrolle"
+              class="material-icons icon-button"
+              style=" padding: 10px 20px 10px 20px; border-radius: 0; float: right;"
+            >add</i>
+          </Modal>
           <button>Liste erstellen</button>
         </div>
+        <button @click="resetList">Reset</button>
 
         <table>
           <thead>
-            <th>Pos</th>
-            <th>Auftragsnummer</th>
-            <th>Untersuchung</th>
-            <th>Sortierung</th>
+            <tr>
+              <th>Pos</th>
+              <th>Auftragsnummer</th>
+              <th>Untersuchung</th>
+            </tr>
           </thead>
-          <tr v-for="(auftrag, i) in orders" :key="i">
-            <td>{{auftrag.pos}}</td>
-            <td>{{auftrag.anr}}</td>
-            <td>{{auftrag.untersuchung}}</td>
-            <td>
-              <i class="material-icons icon-button">arrow_drop_up</i>
-              <i class="material-icons icon-button">arrow_drop_down</i>
-            </td>
-          </tr>
+          <draggable v-model="list" tag="tbody">
+            <tr v-for="(auftrag, i) in list" :key="i">
+              <td scope="row">{{ i + 1 }}</td>
+              <td>{{ auftrag.anr }}</td>
+              <td>{{ auftrag.untersuchung }}</td>
+            </tr>
+          </draggable>
         </table>
       </div>
     </div>
@@ -48,23 +64,97 @@
 </template>
 
 <script>
+import draggable from "vuedraggable";
+
+import Modal from "@/components/Modal";
+
 export default {
+  display: "Table",
+  order: 8,
+  components: {
+    draggable,
+    Modal
+  },
   data() {
     return {
-      showDialog: false,
-      test: "Tunnel"
+      showModal: false,
+      test: "Tunnel",
+      list: [],
+      kontrolle: {
+        pos: 0,
+        anr: "0000000",
+        untersuchung: ""
+      },
+      default_kontrolle: {
+        pos: 0,
+        anr: "0000000",
+        untersuchung: ""
+      }
     };
   },
-
   methods: {
     card_click: function(event, path) {
       this.$router.push(path);
     },
-    showModal() {
-      this.$store.dispatch("PREPARE_SENTOSA_LIST");
+    prepareList() {
+      this.list.push({
+        anr: "0000000",
+        untersuchung: "positive Kontrolle"
+      });
+      this.list.push({
+        anr: "0000000",
+        untersuchung: "negativ Kontrolle"
+      });
+
+      //set pk, nk according settings
+      /*
+      if (state.admin.config.sentosa.auto_pk_anfang) {
+        tempList.push({ pos: 1, anr: "00000000", untersuchung: "pk" });
+      }
+      if (state.admin.config.sentosa.auto_nk_anfang) {
+        tempList.push({ pos: 2, anr: "00000000", untersuchung: "nk" });
+      }
+      */
+      //let array = state.admin.config.sentosa.sentosa_unters;
+
+      // für jede Untersuchung in dem Array mach ein axios call zum GET Endpoint mit ?untersuchung=sentosaUntersuchung['bezeichnung]
+      //for (var i = 0; i < sentosaUntersuchungen.lenght(); i++) {}
+      /*
+      
+      for (let i = 0; i < array.length; i++) {
+        http
+          .get(`/auftrag?untersuchung=${array[i]}`)
+          .then(res => {
+            tempList.push(res.data);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      } 
+      */
     },
-    closeModal() {
-      this.showDialog = false;
+    toggleModal() {
+      this.showModal = !this.showModal;
+    },
+    addKontrolle() {
+      const formData = {
+        pos: this.kontrolle.pos - 1,
+        anr: this.kontrolle.anr,
+        untersuchung: this.kontrolle.untersuchung
+      };
+      this.list.push({
+        pos: formData.pos,
+        anr: formData.anr,
+        untersuchung: formData.untersuchung
+      });
+
+      setTimeout(() => {
+        this.kontrolle = Object.assign({}, this.default_kontrolle);
+      }, 300);
+      this.showModal = false;
+    },
+    resetList() {
+      this.list = Object.assign([], []);
     }
   },
   computed: {
@@ -88,9 +178,7 @@ export default {
 .toolbar {
   display: flex;
   flex-direction: row;
-
   overflow: hidden;
-
   justify-content: center;
   margin-bottom: 10%;
   margin-top: 10%;
@@ -111,7 +199,6 @@ button {
 button:hover {
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
-
 /* The Modal (background) */
 .modal {
   display: none; /* Hidden by default */
@@ -126,7 +213,6 @@ button:hover {
   background-color: rgb(0, 0, 0); /* Fallback color */
   background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 }
-
 /* Modal Content */
 .modal-content {
   background-color: #fefefe;
@@ -135,7 +221,6 @@ button:hover {
   border: 1px solid #888;
   width: 25%;
 }
-
 /* The Close Button */
 .close {
   color: #aaaaaa;
@@ -143,7 +228,6 @@ button:hover {
   font-size: 28px;
   font-weight: bold;
 }
-
 .close:hover,
 .close:focus {
   color: #000;
