@@ -109,6 +109,10 @@ table {
   width: 100%;
 }
 
+thead {
+  background-color: #e6e6e6;
+}
+
 th,
 td {
   padding: 8px;
@@ -135,7 +139,7 @@ tr:hover {
   margin: auto;
 }
 #app {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: left;

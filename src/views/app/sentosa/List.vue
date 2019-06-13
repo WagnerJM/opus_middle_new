@@ -27,21 +27,25 @@
           <Modal
             v-bind="{ closeCallback: toggleModal, showModal, customClass: 'custom_modal_class'}"
           >
-            <h2>Kontrolle</h2>
-            <label for>Position</label>
-            <input v-model="this.kontrolle.pos" type="text">
-            <label for>Untersuchung</label>
-            <input v-model="kontrolle.untersuchung" type="text">
-            <i
-              @click="addKontrolle"
-              class="material-icons icon-button"
-              style=" padding: 10px 20px 10px 20px; border-radius: 0; float: right;"
-            >add</i>
+            <div>
+              <h2>Kontrolle</h2>
+              <label for>Position</label>
+              <input v-model="this.kontrolle.pos" type="text">
+              <label for>Untersuchung</label>
+              <input v-model="kontrolle.untersuchung" type="text">
+              <i
+                @click="addKontrolle"
+                class="material-icons icon-button"
+                style=" padding: 10px 20px 10px 20px; border-radius: 0; float: right;"
+              >add</i>
+            </div>
           </Modal>
           <button>Liste erstellen</button>
         </div>
         <button @click="resetList">Reset</button>
 
+        <h2>Listennummer # {{ listnummer === 0 ? "" : listnummer }}</h2>
+        <FlashMessage></FlashMessage>
         <table>
           <thead>
             <tr>
@@ -89,7 +93,8 @@ export default {
         pos: 0,
         anr: "0000000",
         untersuchung: ""
-      }
+      },
+      listnummer: 0
     };
   },
   methods: {
@@ -137,6 +142,7 @@ export default {
       this.showModal = !this.showModal;
     },
     addKontrolle() {
+      this.$store.commit("loading");
       const formData = {
         pos: this.kontrolle.pos - 1,
         anr: this.kontrolle.anr,
@@ -147,7 +153,7 @@ export default {
         anr: formData.anr,
         untersuchung: formData.untersuchung
       });
-
+      this.$store.commit("loading");
       setTimeout(() => {
         this.kontrolle = Object.assign({}, this.default_kontrolle);
       }, 300);
@@ -155,6 +161,10 @@ export default {
     },
     resetList() {
       this.list = Object.assign([], []);
+      this.flashMessage.success({
+        title: "Erfolg",
+        message: "Die Liste wurde erfolgreich resettet"
+      });
     }
   },
   computed: {
