@@ -34,7 +34,8 @@ export default {
 .footer {
   position: fixed;
   bottom: 0;
-  left: 0 px;
+  left: 0;
+  width: 100%;
   padding: 10px;
   background-color: #ddd;
   width: 100%;
@@ -126,6 +127,8 @@ tr:hover {
 .container {
   width: 65%;
   margin: auto;
+  padding-bottom:3em;
+  
 }
 
 .flex-container {
